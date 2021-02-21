@@ -8,7 +8,7 @@ export default function DateFilter(props) {
   const onChange = (date) => {
     setDate(date);
     props.handleDateCallback(date);
-  };
+  }; //devuelve la fecha al componente principal
 
   return (
     <div>

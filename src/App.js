@@ -22,9 +22,10 @@ function App() {
       setMonth(date.getMonth() + 1);
       setDay(date.getDate());
     }
-  };
+  }; //Maneja la fecha del DatePicker
 
   useEffect(() => {
+    //Hace fetch al cargar la pagina por primera vez
     fetch(`${BASE_URL}latest?base=USD`)
       .then((res) => res.json())
       .then((data) => {
@@ -88,25 +89,30 @@ function App() {
 
   const a = [USD, EUR, CAD, GBP];
 
+  //Principales monedas
   const monedasPrincipal = a.slice(0, numberOfItemsShown).map((moneda) =>
-    !loading ? ( //Principales monedas
+    !loading ? (
       <li key={moneda[0]} value={moneda[0]}>
         {moneda[0][0]}: {moneda[0][1].toFixed(3)}
       </li>
     ) : null
   );
 
+  //Todas las monedas
   const monedasTotal = currencyValues
     .sort()
     .slice(0, numberOfItemsShown)
     .map((moneda) =>
-      !loading ? ( //Todas las monedas
+      !loading ? (
         <li key={moneda[0][0]} value={moneda[0][1]}>
           {moneda[0]}: {moneda[1].toFixed(3)}
         </li>
       ) : null
     );
+
+  //logs
   console.log("currencyValues", currencyValues);
+  console.log("Currency: ", currency);
   console.log("loading", loading);
   console.log("numberOfItemsShown", numberOfItemsShown);
   console.log("Year:", year, "month: ", month, "day ", day);
