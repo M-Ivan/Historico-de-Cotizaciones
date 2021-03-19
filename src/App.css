@@ -15,7 +15,7 @@ body {
   border-radius: 0.3em;
   border: 0px;
   margin: 0.5rem;
-  padding: 5rem;
+  padding: 4rem;
   box-shadow: 0px 0px 6px #333333;
 }
 
@@ -27,6 +27,7 @@ body {
 }
 
 select.large {
+  cursor: pointer;
   width: 100%;
   border: 0px solid #7777779c;
   border-radius: 0.3em;
@@ -37,17 +38,23 @@ select.large {
 }
 
 button.primary {
+  transition: background-color 0.5s ease;
   margin-top: 3rem;
   border-radius: 2rem;
   border: 0px;
   width: 100%;
   padding: 0.7rem;
-  background-color: #1656b6;
+  background-color: #005eff;
   color: #ffffff;
   box-shadow: 0px 0px 6px #333333;
   font-size: 20px;
 }
+button.primary:hover {
+  background-color: #1656b6;
+}
 button.secondary {
+  transition: background-color 0.5s ease;
+
   margin-top: 3rem;
   border-radius: 2rem;
   border: 1px solid #1265ff;
@@ -57,6 +64,11 @@ button.secondary {
   color: #000000;
   box-shadow: 0px 0px 10px #1265ff;
   font-size: 20px;
+}
+button.secondary:hover {
+  background-color: #005eff;
+  color: #ffffff;
+  box-shadow: 0px 0px 10px #000000;
 }
 input.large {
   width: 29rem;
@@ -73,9 +85,8 @@ ul {
   padding: 0;
 }
 
-/* List element */
+/* List */
 li {
-  width: 100%;
   counter-increment: index;
   display: flex;
   align-items: center;
@@ -83,7 +94,7 @@ li {
   box-sizing: border-box;
 }
 
-/* Element separation */
+/* Separacion */
 li + li {
-  border-top: 1px solid #7777779c;
+  border-top: 1px solid #77777752;
 }

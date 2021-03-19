@@ -6,7 +6,7 @@ export default function SelectBox(props) {
   return (
     <div>
       <div className="text">Seleccione una divisa</div>
-      <div>
+      <div className="custom-select">
         <select
           className="large"
           value={selectedCurrency}
