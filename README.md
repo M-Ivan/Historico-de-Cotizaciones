@@ -1,6 +1,6 @@
 # Historico de cotizaciones
 
-![Reactstaurante](/exchangeR.png)
+![Reactstaurante](/exchangeR3.png)
 
 ## Para correr en local
 

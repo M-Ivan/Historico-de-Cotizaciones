@@ -5,6 +5,11 @@ import React from "react";
 import DateFilter from "./components/DateFilter";
 import ReactLoading from "react-loading";
 import { Fade } from "react-animation-components";
+import {
+  FlagsResto,
+  FlagsPrincipal,
+  FlagsPrincipalEUR,
+} from "./components/FlagComponents";
 
 const BASE_URL = "https://api.exchangeratesapi.io/";
 function App() {
@@ -70,7 +75,7 @@ function App() {
   //Boton ver mas
   const showMoreHandler = () => {
     if (numberOfItemsShown === 4) {
-      setNumberOfItemsShown(+33);
+      setNumberOfItemsShown(currencyValues.length);
     } else {
       setNumberOfItemsShown(4);
     }
@@ -98,11 +103,15 @@ function App() {
   });
 
   // Devuelve las monedas que no sean GBP, USD, EUR o CAD
+  // Por alguna razón que aún no comprendo no fue posible
+  // resolver el mismo filtro en una sola función para el caso positivo
+  // ya que solo devolvia el primer valor luego del return, incluso
+  // copiando codigo y reemplazando !== por ===
   const filtered = currencyValues.filter(([key]) => {
     return key !== "CAD" && key !== "GBP" && key !== "USD" && key !== "EUR";
   });
 
-  // Luego de filtrar las keys en
+  // Luego de filtrar las keys principales
   // las define en un array
   const a = [EUR, USD, CAD, GBP];
 
@@ -120,7 +129,8 @@ function App() {
           currency !== "EUR" ? (
             <li key={moneda[0][0]} value={moneda[0][1]}>
               {" "}
-              {moneda[0][0]}: {moneda[0][1].toFixed(3)}{" "}
+              <FlagsPrincipal moneda={moneda} />
+              <strong>{moneda[0][0]}</strong>: {moneda[0][1].toFixed(3)}{" "}
             </li>
           ) : (
             "No se encontraron monedas"
@@ -130,8 +140,8 @@ function App() {
       ? b.slice(0, numberOfItemsShown).map((moneda) =>
           currency === "EUR" ? (
             <li key={moneda[0][0]} value={moneda[0][1]}>
-              {" "}
-              {moneda[0][0]}: {moneda[0][1].toFixed(3)}{" "}
+              <FlagsPrincipalEUR moneda={moneda} />
+              <strong>{moneda[0][0]}</strong>: {moneda[0][1].toFixed(3)}
             </li>
           ) : (
             "No se encontraron monedas"
@@ -139,7 +149,8 @@ function App() {
         )
       : null;
 
-  //Todas las monedas
+  // Todas las monedas que no son
+  // las 4 principales
   const resto =
     currencyValues.length > 0
       ? filtered
@@ -147,21 +158,22 @@ function App() {
           .slice(0, numberOfItemsShown)
           .map((moneda) => (
             <li key={moneda[0]} value={moneda[1]}>
-              {moneda[0]}: {moneda[1].toFixed(3)}
+              <FlagsResto moneda={moneda} />
+              <strong>{moneda[0]}</strong>: {moneda[1].toFixed(3)}
             </li>
           ))
       : "No se encontraron monedas";
 
   //logs
-  // console.log("currencyValues", currencyValues);
-  // console.log("Currency: ", currency);
-  // console.log("loading", loading);
-  // console.log("numberOfItemsShown", numberOfItemsShown);
-  // console.log("Year:", year, "month: ", month, "day ", day);
+  console.log("currencyValues:", currencyValues);
+  console.log("currency: ", currency);
+  console.log("loading", loading);
+  console.log("numberOfItemsShown", numberOfItemsShown);
+  console.log("year:", year, "month: ", month, "day ", day);
 
   return (
     <div className="card">
-      <h1>Historico de cotizaciones</h1>
+      <h1>Histórico de cotizaciones</h1>
       <SelectBox
         currencyValues={currencyValues}
         currencyOptions={currencyOptions}
@@ -183,7 +195,6 @@ function App() {
                 : " actual"}
               <hr />
             </div>
-
             <ul className="text">
               {loading ? (
                 <li>
@@ -198,8 +209,13 @@ function App() {
                 </li>
               ) : null}
               <Fade in>
+                {currency === "EUR" ? (
+                  <li>
+                    <img className="flag" src="/images/eur.png" alt=""></img>
+                    EUR: 1.000
+                  </li>
+                ) : null}
                 {numberOfItemsShown <= 4 ? primeras : null}
-                {currency === "EUR" ? <li>EUR: 1.000</li> : null}
                 {numberOfItemsShown > 4 ? primeras : null}
                 {numberOfItemsShown > 4 ? resto : null}
               </Fade>
