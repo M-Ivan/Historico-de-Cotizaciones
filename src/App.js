@@ -10,6 +10,7 @@ import {
   FlagsPrincipal,
   FlagsPrincipalEUR,
 } from "./components/FlagComponents";
+import MessageBox from "./components/MessageBox";
 
 const BASE_URL = "https://api.exchangeratesapi.io/";
 function App() {
@@ -21,6 +22,7 @@ function App() {
   const [currencyValues, setCurrencyValues] = useState([]);
   const [numberOfItemsShown, setNumberOfItemsShown] = useState(4);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   //Maneja la fecha del DatePicker
   const handleDateCallback = (date) => {
@@ -53,12 +55,22 @@ function App() {
       fetch(`${BASE_URL}${year}-${month}-${day}?base=${currency}`)
         .then((res) => res.json())
         .then((data) => {
+          setError(null);
+          console.log("data", data);
           setCurrencyValues(
             Object.entries(data.rates).map((key) => {
               return key;
             })
           );
-        });
+        })
+        .catch((error) =>
+          setError(
+            error.message === "Cannot convert undefined or null to object"
+              ? (error.message =
+                  "Error 400: La divisa elegida es posterior a la fecha solicitada, o simplemente no hay registros de la fecha selccionada para la divisa elegida. No hay cotizaciones.")
+              : null
+          )
+        );
     } else {
       fetch(`${BASE_URL}latest?base=${currency}`)
         .then((res) => res.json())
@@ -209,26 +221,30 @@ function App() {
                 </li>
               ) : null}
               <Fade in>
-                {currency === "EUR" ? (
+                {!error && currency === "EUR" ? (
                   <li>
                     <img className="flag" src="/images/eur.png" alt=""></img>
-                    EUR: 1.000
+                    <strong>EUR</strong>: 1.000
                   </li>
                 ) : null}
-                {numberOfItemsShown <= 4 ? primeras : null}
-                {numberOfItemsShown > 4 ? primeras : null}
-                {numberOfItemsShown > 4 ? resto : null}
+                {error ? (
+                  <MessageBox variant="danger">{error}</MessageBox>
+                ) : null}
+
+                {!error && numberOfItemsShown <= 4 ? primeras : null}
+                {!error && numberOfItemsShown > 4 ? primeras : null}
+                {!error && numberOfItemsShown > 4 ? resto : null}
               </Fade>
             </ul>
-            {resto.length <= 4 ? (
+            {!error && resto.length <= 4 ? (
               <button className="secondary" onClick={showMoreHandler}>
                 Ver todas las cotizaciones
               </button>
-            ) : (
+            ) : !error && resto.length > 4 ? (
               <button className="secondary" onClick={showMoreHandler}>
                 Ver menos cotizaciones
               </button>
-            )}
+            ) : error ? null : null}
           </div>
         </div>
       </div>
